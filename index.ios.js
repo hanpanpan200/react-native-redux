@@ -15,19 +15,35 @@ import {
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
+function counter(state = 0, action) {
+  switch (action.type) {
+  case 'INCREMENT':
+    return state + 1;
+  case 'DECREMENT':
+    return state - 1;
+  default: 
+    return state;
+  }
+}
+
+let store = createStore(counter);
+
+store.subscribe(() => {
+  console.log(store.getState())
+}); 
+
 class ReduxDemo extends Component {
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
-          Welcome to React Native!
+          {store.getState()}
         </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
+        <Text style={styles.welcome} onPress={ () => { store.dispatch({type:"INCREMENT"})} }>
+          INCREMENT
         </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
+        <Text style={styles.welcome} onPress={ () => { store.dispatch({type: "DECREMENT" })} }>
+          DECREMENT
         </Text>
       </View>
     );
@@ -45,11 +61,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
   },
 });
 
